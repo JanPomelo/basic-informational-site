@@ -6,30 +6,32 @@ const server = http.createServer();
 
 server.on('request', (request, res) => {
   const url = new URL(request.url, 'http://localhost:8080/');
-  console.log(url);
   let filename;
   switch (url.pathname) {
     case '/':
-      filename = 'index';
+      filename = 'index.html';
       break;
     case '/about':
-      filename = 'about';
+      filename = 'about.html';
       break;
     case '/contact':
-      filename = 'contact-me';
+      filename = 'contact-me.html';
+      break;
+    case '/style.css':
+      filename = 'style.css';
       break;
     default:
-      filename = 404;
+      filename = '404.html';
       break;
   }
-  filename = filename + '.html';
 
   fs.readFile(filename, (err, data) => {
     if (err) {
       res.writeHead(404, { 'Content-Type': 'text/html' });
       return res.end('404 Not Found');
     }
-    res.writeHead(200, { 'Content-Type': 'text/html' });
+    // eslint-disable-next-line max-len
+    res.writeHead(200, { 'Content-Type': 'text/' + filename.substring(filename.indexOf('.') + 1) });
     res.write(data);
     return res.end();
   });
